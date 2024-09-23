@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.RnaInteractionMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.RnaInteraction">
+        <result column="f_chr_a" jdbcType="VARCHAR" property="chrA"/>
+        <result column="f_start_a" jdbcType="INTEGER" property="startA"/>
+        <result column="f_end_a" jdbcType="INTEGER" property="endA"/>
+        <result column="f_chr_b" jdbcType="VARCHAR" property="chrB"/>
+        <result column="f_start_b" jdbcType="INTEGER" property="startB"/>
+        <result column="f_end_b" jdbcType="INTEGER" property="endB"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+    </resultMap>
+    <select id="selectByChrAndStartAndEnd" resultMap="BaseResultMap">
+        select f_chr_a, f_start_a, f_end_a, f_chr_b, f_start_b, f_end_b, f_cell_type
+        from t_rna_interaction
+        WHERE (
+            f_chr_a = #{chr}
+                AND (
+                #{start} BETWEEN f_start_a AND f_end_a
+                    OR
+                #{end} BETWEEN f_start_a AND f_end_a
+                    OR
+                f_start_a BETWEEN #{start} AND #{end}
+                    OR
+                f_end_a BETWEEN #{start} AND #{end}
+                )
+            )
+           OR (
+            f_chr_b = #{chr}
+                AND (
+                #{start} BETWEEN f_start_b AND f_end_b
+                    OR
+                #{end} BETWEEN f_start_b AND f_end_b
+                    OR
+                f_start_b BETWEEN #{start} AND #{end}
+                    OR
+                f_end_b BETWEEN #{start} AND #{end}
+                )
+            )
+    </select>
+</mapper>

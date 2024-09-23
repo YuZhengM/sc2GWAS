@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GwasMarkerMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.GwasMarker">
+        <result column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_gene" jdbcType="VARCHAR" property="gene"/>
+        <result column="f_p_value" jdbcType="VARCHAR" property="pValue"/>
+        <result column="f_avg_log2fc" jdbcType="VARCHAR" property="avgLog2fc"/>
+        <result column="f_pct1" jdbcType="DOUBLE" property="pct1"/>
+        <result column="f_pct2" jdbcType="DOUBLE" property="pct2"/>
+        <result column="f_p_value_adjust" jdbcType="VARCHAR" property="pValueAdjust"/>
+    </resultMap>
+    <select id="selectByGwasIdAndGseId" resultMap="BaseResultMap">
+        select f_gwas_id,
+               f_gse_id,
+               f_gene,
+               f_p_value,
+               f_avg_log2fc,
+               f_pct1,
+               f_pct2,
+               f_p_value_adjust
+        from t_gwas_marker_${pValue}
+        WHERE f_gse_id = #{gseId}
+          AND f_gwas_id = #{gwasId}
+    </select>
+</mapper>

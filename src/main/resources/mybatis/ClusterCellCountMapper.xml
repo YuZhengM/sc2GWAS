@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.ClusterCellCountMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.ClusterCellCount">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_cluster" jdbcType="INTEGER" property="cluster"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+        <result column="f_count" jdbcType="INTEGER" property="count"/>
+    </resultMap>
+    <select id="searchByGseId" resultMap="BaseResultMap">
+        select f_gse_id, f_cluster, f_cell_type, f_count
+        from t_cluster_cell_count
+        WHERE f_gse_id = #{gseId}
+    </select>
+    <select id="selectFieldByInfo" resultType="java.lang.String">
+        SELECT
+        DISTINCT ${field}
+        FROM t_cluster_cell_count
+        where 1 = 1
+        <if test="searchVO.gseId != null and searchVO.gseId != '' and searchVO.gseId != 'All'">
+            AND
+            f_gse_id = #{searchVO.gseId}
+        </if>
+        <if test="searchVO.cellType != null and searchVO.cellType != '' and searchVO.cellType != 'All'">
+            AND
+            f_cell_type = #{searchVO.cellType}
+        </if>
+    </select>
+    <select id="searchCellTypeCountByGseIdList" resultType="com.spring.boot.util.model.vo.FieldNumber">
+        SELECT DISTINCT `t`.`f_cell_type` AS `field`,
+        COUNT(0) AS `number`
+        FROM (
+        SELECT DISTINCT f_gse_id, f_cell_type from
+        t_cluster_cell_count
+        ) as t
+        WHERE `t`.f_gse_id IN
+        <foreach collection="gseIdList" open="(" separator="," close=")" item="gseId">
+            #{gseId}
+        </foreach>
+        <if test="cellType != 'All'">
+            AND `t`.`f_cell_type` = #{cellType}
+        </if>
+        GROUP BY t.f_cell_type
+    </select>
+</mapper>

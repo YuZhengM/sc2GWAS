@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GwasGseMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.GwasGse">
+        <result column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <association property="gwas" javaType="com.spring.boot.pojo.Gwas">
+            <id column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+            <result column="f_domain" jdbcType="VARCHAR" property="domain"/>
+            <result column="f_chapter_level" jdbcType="VARCHAR" property="chapterLevel"/>
+            <result column="f_sub_chapter_level" jdbcType="VARCHAR" property="subChapterLevel"/>
+            <result column="f_trait" jdbcType="VARCHAR" property="trait"/>
+            <result column="f_sample_number" jdbcType="INTEGER" property="sampleNumber"/>
+            <result column="f_population" jdbcType="VARCHAR" property="population"/>
+            <result column="f_pmid" jdbcType="VARCHAR" property="pmid"/>
+            <result column="f_year" jdbcType="INTEGER" property="year"/>
+            <result column="f_case_sample_number" jdbcType="INTEGER" property="caseSampleNumber"/>
+            <result column="f_control_sample_number" jdbcType="INTEGER" property="controlSampleNumber"/>
+            <result column="f_snps_number" jdbcType="INTEGER" property="snpsNumber"/>
+            <result column="f_genome" jdbcType="VARCHAR" property="genome"/>
+            <result column="f_hits_number" jdbcType="INTEGER" property="hitsNumber"/>
+            <result column="f_note" jdbcType="VARCHAR" property="note"/>
+            <result column="f_download_url" jdbcType="VARCHAR" property="downloadUrl"/>
+            <result column="f_mesh_id" jdbcType="VARCHAR" property="meshId"/>
+        </association>
+        <association property="singleCell" javaType="com.spring.boot.pojo.SingleCell">
+            <id column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+            <result column="f_gsm_id" jdbcType="VARCHAR" property="gsmId"/>
+            <result column="f_domain" jdbcType="VARCHAR" property="domain"/>
+            <result column="f_disease" jdbcType="VARCHAR" property="disease"/>
+            <result column="f_biosample_type" jdbcType="VARCHAR" property="biosampleType"/>
+            <result column="f_tissue_type" jdbcType="VARCHAR" property="tissueType"/>
+            <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+            <result column="f_cell_number" jdbcType="INTEGER" property="cellNumber"/>
+            <result column="f_pmid" jdbcType="VARCHAR" property="pmid"/>
+            <result column="f_platform" jdbcType="VARCHAR" property="platform"/>
+            <result column="f_sample_number" jdbcType="INTEGER" property="sampleNumber"/>
+            <result column="f_mesh_id" jdbcType="VARCHAR" property="meshId"/>
+            <result column="f_label" jdbcType="INTEGER" property="label"/>
+        </association>
+    </resultMap>
+    <select id="selectGwasByGseId" resultType="java.lang.String">
+        SELECT f_gwas_id
+        FROM t_gwas_gse
+        WHERE f_gse_id = #{gseId}
+    </select>
+    <select id="selectGseByGwasId" resultType="java.lang.String">
+        SELECT f_gse_id
+        FROM t_gwas_gse
+        WHERE f_gwas_id = #{gwasId}
+    </select>
+    <select id="selectGseByGwasIdList" resultType="java.lang.String">
+        SELECT DISTINCT f_gse_id
+        FROM t_gwas_gse
+        WHERE f_gwas_id IN
+        <foreach collection="gwasIdList" open="(" separator="," close=")" item="gwasId">
+            #{gwasId}
+        </foreach>
+    </select>
+    <select id="selectGwasByGseIdList" resultType="java.lang.String">
+        SELECT DISTINCT f_gwas_id
+        FROM t_gwas_gse
+        WHERE f_gse_id IN
+        <foreach collection="gseIdList" open="(" separator="," close=")" item="gseId">
+            #{gseId}
+        </foreach>
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_single_cell,
+             t_gwas,
+             t_gwas_gse
+        WHERE t_single_cell.f_gse_id = t_gwas_gse.f_gse_id
+          AND t_gwas.f_gwas_id = t_gwas_gse.f_gwas_id
+    </select>
+    <select id="selectByGseIdList" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_gwas_gse, t_gwas
+        WHERE t_gwas_gse.f_gse_id IN
+        <foreach collection="gseIdList" open="(" separator="," close=")" item="gseId">
+            #{gseId}
+        </foreach>
+        AND t_gwas.f_gwas_id = t_gwas_gse.f_gwas_id
+    </select>
+    <select id="selectByGwasIdList" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_gwas_gse, t_single_cell
+        WHERE t_gwas_gse.f_gwas_id IN
+        <foreach collection="gwasIdList" open="(" separator="," close=")" item="gwasId">
+            #{gwasId}
+        </foreach>
+        AND t_single_cell.f_gse_id = t_gwas_gse.f_gse_id
+    </select>
+    <select id="selectAllWithPage" resultMap="BaseResultMap">
+        SELECT *
+        FROM t_single_cell,
+             t_gwas,
+             t_gwas_gse
+        WHERE t_single_cell.f_gse_id = t_gwas_gse.f_gse_id
+          AND t_gwas.f_gwas_id = t_gwas_gse.f_gwas_id
+        <include refid="com.spring.boot.order_sql_and"/>
+    </select>
+</mapper>

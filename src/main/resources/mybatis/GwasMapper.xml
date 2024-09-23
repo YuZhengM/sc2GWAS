@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GwasMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.Gwas">
+        <id column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="f_chapter_level" jdbcType="VARCHAR" property="chapterLevel"/>
+        <result column="f_sub_chapter_level" jdbcType="VARCHAR" property="subChapterLevel"/>
+        <result column="f_trait" jdbcType="VARCHAR" property="trait"/>
+        <result column="f_sample_number" jdbcType="INTEGER" property="sampleNumber"/>
+        <result column="f_population" jdbcType="VARCHAR" property="population"/>
+        <result column="f_pmid" jdbcType="VARCHAR" property="pmid"/>
+        <result column="f_year" jdbcType="INTEGER" property="year"/>
+        <result column="f_case_sample_number" jdbcType="INTEGER" property="caseSampleNumber"/>
+        <result column="f_control_sample_number" jdbcType="INTEGER" property="controlSampleNumber"/>
+        <result column="f_snps_number" jdbcType="INTEGER" property="snpsNumber"/>
+        <result column="f_genome" jdbcType="VARCHAR" property="genome"/>
+        <result column="f_hits_number" jdbcType="INTEGER" property="hitsNumber"/>
+        <result column="f_note" jdbcType="VARCHAR" property="note"/>
+        <result column="f_download_url" jdbcType="VARCHAR" property="downloadUrl"/>
+        <result column="f_mesh_id" jdbcType="VARCHAR" property="meshId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        f_gwas_id, f_domain, f_chapter_level, f_sub_chapter_level, f_trait, f_sample_number,
+        f_population, f_pmid, f_year, f_case_sample_number, f_control_sample_number, f_snps_number,
+        f_genome, f_hits_number, f_note, f_download_url, f_mesh_id
+    </sql>
+    <select id="selectByGwasId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        where f_gwas_id = #{gwasId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+    </select>
+    <select id="selectByGwasIdList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        WHERE f_gwas_id IN
+        <foreach collection="gwasIdList" open="(" separator="," close=")" item="gwasId">
+            #{gwasId}
+        </foreach>
+    </select>
+    <select id="selectBySubChapterLevel" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        WHERE f_sub_chapter_level = #{subChapterLevel}
+    </select>
+    <select id="selectFieldByInfo" resultType="java.lang.String">
+        select
+        DISTINCT ${field}
+        from t_gwas
+        WHERE 1 = 1
+        <if test="searchVO.trait != null and searchVO.trait != '' and searchVO.trait != 'All'">
+            AND
+            f_trait like #{searchVO.trait}
+        </if>
+        <if test="searchVO.domain != null and searchVO.domain != '' and searchVO.domain != 'All'">
+            AND
+            f_domain like #{searchVO.domain}
+        </if>
+    </select>
+    <select id="selectByInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        WHERE 1 = 1
+        <if test="searchVO.trait != null and searchVO.trait != '' and searchVO.trait != 'All'">
+            AND
+            (f_trait like #{searchVO.trait} OR f_sub_chapter_level like #{searchVO.trait})
+        </if>
+        <if test="searchVO.domain != null and searchVO.domain != '' and searchVO.domain != 'All'">
+            <if test="searchVO.trait != null and searchVO.trait != '' and searchVO.trait != 'All'">
+                OR
+            </if>
+            <if test="searchVO.trait == null or searchVO.trait == '' or searchVO.trait == 'All'">
+                AND
+            </if>
+            f_domain like #{searchVO.domain}
+        </if>
+        <include refid="com.spring.boot.order_sql_and"/>
+    </select>
+    <select id="selectGwasIdBySubChapterLevel" resultType="java.lang.String">
+        select DISTINCT f_gwas_id
+        from t_gwas
+        WHERE f_sub_chapter_level = #{subChapterLevel}
+    </select>
+    <select id="selectInfoByMeshId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        <if test="searchVO.meshId != null and searchVO.meshId != '' and searchVO.meshId != 'All'">
+            WHERE
+            f_mesh_id = #{searchVO.meshId}
+        </if>
+    </select>
+    <select id="searchByDataBrowseParams" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_gwas
+        WHERE 1=1
+        <if test="dataBrowseVO.domain != 'All'">
+            AND f_domain like #{dataBrowseVO.domain}
+        </if>
+        <if test="dataBrowseVO.phenotype != 'All'">
+            AND f_trait like #{dataBrowseVO.phenotype}
+        </if>
+    </select>
+</mapper>

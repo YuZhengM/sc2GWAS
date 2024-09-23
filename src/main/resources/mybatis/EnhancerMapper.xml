@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.EnhancerMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.Enhancer">
+        <result column="f_chr" jdbcType="VARCHAR" property="chr"/>
+        <result column="f_start" jdbcType="INTEGER" property="start"/>
+        <result column="f_end" jdbcType="INTEGER" property="end"/>
+        <result column="f_enhancer" jdbcType="VARCHAR" property="enhancer"/>
+        <result column="f_type" jdbcType="VARCHAR" property="type"/>
+    </resultMap>
+    <select id="selectByChrAndStartAndEnd" resultMap="BaseResultMap">
+        select f_chr, f_start, f_end, f_enhancer, f_type
+        from t_enhancer
+        <include refid="com.spring.boot.chromatin_interaction_where"/>
+    </select>
+</mapper>

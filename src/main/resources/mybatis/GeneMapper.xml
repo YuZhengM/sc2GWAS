@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GeneMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.Gene">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_gene" jdbcType="VARCHAR" property="gene"/>
+    </resultMap>
+    <select id="searchGeneByGseId" resultType="java.lang.String">
+        SELECT DISTINCT f_gene
+        FROM t_gene
+        WHERE f_gse_id = #{gseId}
+    </select>
+    <select id="searchGeneByIdAndTable" resultType="java.lang.String">
+        SELECT DISTINCT f_gene
+        FROM ${table}
+        WHERE f_id = #{id}
+    </select>
+    <select id="selectGeneAll" resultType="java.lang.String">
+        SELECT DISTINCT f_gene
+        FROM t_gene
+    </select>
+</mapper>

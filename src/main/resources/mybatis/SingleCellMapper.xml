@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.SingleCellMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.SingleCell">
+        <id column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_gsm_id" jdbcType="VARCHAR" property="gsmId"/>
+        <result column="f_domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="f_disease" jdbcType="VARCHAR" property="disease"/>
+        <result column="f_biosample_type" jdbcType="VARCHAR" property="biosampleType"/>
+        <result column="f_tissue_type" jdbcType="VARCHAR" property="tissueType"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+        <result column="f_cell_number" jdbcType="INTEGER" property="cellNumber"/>
+        <result column="f_pmid" jdbcType="VARCHAR" property="pmid"/>
+        <result column="f_platform" jdbcType="VARCHAR" property="platform"/>
+        <result column="f_sample_number" jdbcType="INTEGER" property="sampleNumber"/>
+        <result column="f_mesh_id" jdbcType="VARCHAR" property="meshId"/>
+        <result column="f_label" jdbcType="INTEGER" property="label"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        f_gse_id, f_gsm_id, f_domain, f_disease, f_biosample_type, f_tissue_type, f_cell_type, f_cell_number,
+        f_pmid, f_platform, f_sample_number, f_mesh_id, f_label
+    </sql>
+    <select id="selectByGseId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+        where f_gse_id = #{gseId}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+    </select>
+    <select id="selectByDisease" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+        where f_disease = #{disease}
+    </select>
+    <select id="selectFieldByInfo" resultType="java.lang.String">
+        select
+        DISTINCT ${field}
+        from t_single_cell
+        where 1 = 1
+        <if test="searchVO.biosampleType != null and searchVO.biosampleType != '' and searchVO.biosampleType != 'All'">
+            AND
+            f_biosample_type = #{searchVO.biosampleType}
+        </if>
+        <if test="searchVO.tissueType != null and searchVO.tissueType != '' and searchVO.tissueType != 'All'">
+            AND
+            f_tissue_type = #{searchVO.tissueType}
+        </if>
+    </select>
+    <select id="selectByInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+        WHERE 1 = 1
+        <if test="searchVO.biosampleType != null and searchVO.biosampleType != '' and searchVO.biosampleType != 'All'">
+            AND
+            f_biosample_type = #{searchVO.biosampleType}
+        </if>
+        <if test="searchVO.tissueType != null and searchVO.tissueType != '' and searchVO.tissueType != 'All'">
+            AND
+            f_tissue_type = #{searchVO.tissueType}
+        </if>
+        <include refid="com.spring.boot.order_sql_and"/>
+    </select>
+    <select id="selectInfoByDiseaseAndCellType" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+        WHERE f_gse_id IN
+        (
+        SELECT f_gse_id FROM t_distinct_cluster_cell_type
+        WHERE 1 = 1
+        <if test="searchVO.disease != null and searchVO.disease != '' and searchVO.disease != 'All'">
+            AND
+            f_disease = #{searchVO.disease}
+        </if>
+        <if test="searchVO.cellType != null and searchVO.cellType != '' and searchVO.cellType != 'All'">
+            AND
+            f_cell_type = #{searchVO.cellType}
+        </if>
+        )
+    </select>
+    <select id="selectGseIdByDisease" resultType="java.lang.String">
+        SELECT DISTINCT f_gse_id
+        FROM t_single_cell
+        WHERE f_disease = #{disease}
+    </select>
+    <select id="searchByDataBrowseParams" resultMap="BaseResultMap">
+        select
+        t_single_cell.f_gse_id, f_gsm_id, f_domain, f_disease, f_biosample_type, f_tissue_type, t_single_cell.f_cell_type, f_cell_number,
+        f_pmid, f_platform, f_sample_number, f_mesh_id, f_label
+        from t_single_cell
+        <if test="dataBrowseVO.cellType != 'All'">
+           , t_distinct_cell_type
+        </if>
+        WHERE 1=1
+        <if test="dataBrowseVO.phenotype != 'All'">
+            AND f_disease = #{dataBrowseVO.phenotype}
+        </if>
+        <if test="dataBrowseVO.biosampleType != 'All'">
+            AND f_biosample_type = #{dataBrowseVO.biosampleType}
+        </if>
+        <if test="dataBrowseVO.tissueType != 'All'">
+            AND f_tissue_type = #{dataBrowseVO.tissueType}
+        </if>
+        <if test="dataBrowseVO.domain != 'All'">
+            AND f_domain = #{dataBrowseVO.domain}
+        </if>
+        <if test="dataBrowseVO.cellType != 'All'">
+            AND t_distinct_cell_type.f_cell_type = #{dataBrowseVO.cellType}
+            AND t_single_cell.f_gse_id = t_distinct_cell_type.f_gse_id
+        </if>
+    </select>
+    <select id="selectByGseIdList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_single_cell
+        WHERE f_gse_id IN
+        <foreach collection="gseIdList" open="(" separator="," close=")" item="gseId">
+            #{gseId}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.FdrGseGwasMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.FdrGseGwas">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_std_dev_fdr_05" jdbcType="DOUBLE" property="stdDevFdr05"/>
+        <result column="f_std_dev_fdr_1" jdbcType="DOUBLE" property="stdDevFdr1"/>
+        <result column="f_std_dev_fdr_2" jdbcType="DOUBLE" property="stdDevFdr2"/>
+    </resultMap>
+    <select id="selectByGseIdList" resultMap="BaseResultMap">
+        select f_gse_id, f_gwas_id, f_std_dev_fdr_05, f_std_dev_fdr_1, f_std_dev_fdr_2
+        from t_cluster_gse_gwas
+        WHERE f_gse_id IN
+        <foreach collection="gseIdList" open="(" separator="," close=")" item="gseId">
+            #{gseId}
+        </foreach>
+    </select>
+
+</mapper>

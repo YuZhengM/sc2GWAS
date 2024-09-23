@@ -1,0 +1,71 @@
+{
+  "properties": [
+    {
+      "name": "com.linux.host",
+      "type": "java.lang.String",
+      "description": "Description for com.linux.host."
+    },
+    {
+      "name": "com.linux.port",
+      "type": "java.lang.Integer",
+      "defaultValue": 22,
+      "description": "Description for com.linux.port."
+    },
+    {
+      "name": "com.linux.username",
+      "type": "java.lang.String",
+      "defaultValue": "root",
+      "description": "Description for com.linux.username."
+    },
+    {
+      "name": "com.linux.password",
+      "type": "java.lang.String",
+      "description": "Description for com.linux.password."
+    },
+    {
+      "name": "com.path.workPath",
+      "type": "java.lang.String",
+      "description": "Description for com.path.workPath."
+    },
+    {
+      "name": "com.path.pagePath",
+      "type": "java.lang.String",
+      "description": "Description for com.path.tomcatPath."
+    },
+    {
+      "name": "com.path.bedtoolsPath",
+      "type": "java.lang.String",
+      "description": "Description for com.path.bedtoolsPath."
+    },
+    {
+      "name": "com.mongodb.host",
+      "type": "java.lang.String",
+      "description": "Description for com.mongodb.host."
+    },
+    {
+      "name": "com.mongodb.port",
+      "type": "java.lang.Integer",
+      "description": "Description for com.mongodb.port."
+    },
+    {
+      "name": "com.mongodb.database",
+      "type": "java.lang.String",
+      "description": "Description for com.mongodb.database."
+    },
+    {
+      "name": "com.mongodb.username",
+      "type": "java.lang.String",
+      "description": "Description for com.mongodb.username."
+    },
+    {
+      "name": "com.mongodb.password",
+      "type": "java.lang.String",
+      "description": "Description for com.mongodb.password."
+    },
+    {
+      "name": "com.mongodb.connectTime",
+      "type": "java.lang.String",
+      "description": "Description for com.mongodb.connectTime."
+    }
+  ]
+}

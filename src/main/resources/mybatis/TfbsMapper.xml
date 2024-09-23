@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.TfbsMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.Tfbs">
+        <result column="f_chr" jdbcType="VARCHAR" property="chr"/>
+        <result column="f_start" jdbcType="INTEGER" property="start"/>
+        <result column="f_end" jdbcType="INTEGER" property="end"/>
+        <result column="f_tf_name" jdbcType="VARCHAR" property="tfName"/>
+        <result column="f_score" jdbcType="INTEGER" property="score"/>
+        <result column="f_strand" jdbcType="VARCHAR" property="strand"/>
+        <result column="f_description" jdbcType="VARCHAR" property="description"/>
+    </resultMap>
+    <select id="selectByChrAndStartAndEnd" resultMap="BaseResultMap">
+        select f_chr, f_start, f_end, f_tf_name, f_score, f_strand, f_description
+        from t_tfbs
+        <include refid="com.spring.boot.chromatin_interaction_where"/>
+    </select>
+</mapper>

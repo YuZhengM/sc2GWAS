@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GeneDiseaseAssociationMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.GeneDiseaseAssociation">
+        <result column="f_gene_symbol" jdbcType="VARCHAR" property="geneSymbol"/>
+        <result column="f_disease_id" jdbcType="VARCHAR" property="diseaseId"/>
+        <result column="f_disease_name" jdbcType="VARCHAR" property="diseaseName"/>
+        <result column="f_disease_type" jdbcType="VARCHAR" property="diseaseType"/>
+        <result column="f_disease_class" jdbcType="VARCHAR" property="diseaseClass"/>
+        <result column="f_disease_semantic_type" jdbcType="VARCHAR" property="diseaseSemanticType"/>
+        <result column="f_score" jdbcType="DOUBLE" property="score"/>
+        <result column="f_nof_snps" jdbcType="INTEGER" property="nofSnps"/>
+        <result column="f_source" jdbcType="VARCHAR" property="source"/>
+    </resultMap>
+    <select id="selectByGene" resultMap="BaseResultMap">
+        select f_gene_symbol,
+               f_disease_id,
+               f_disease_name,
+               f_disease_type,
+               f_disease_class,
+               f_disease_semantic_type,
+               f_score,
+               f_nof_snps,
+               f_source
+        from t_gene_disease_association
+        WHERE f_gene_symbol = #{gene}
+    </select>
+</mapper>

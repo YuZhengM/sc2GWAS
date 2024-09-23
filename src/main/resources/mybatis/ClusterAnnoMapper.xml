@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.ClusterAnnoMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.ClusterAnno">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_barcode" jdbcType="VARCHAR" property="barcode"/>
+        <result column="f_tsne1" jdbcType="DOUBLE" property="tsne1"/>
+        <result column="f_tsne2" jdbcType="DOUBLE" property="tsne2"/>
+        <result column="f_cluster" jdbcType="INTEGER" property="cluster"/>
+        <result column="f_gsm_id" jdbcType="VARCHAR" property="gsmId"/>
+        <result column="f_umap1" jdbcType="DOUBLE" property="umap1"/>
+        <result column="f_umap2" jdbcType="DOUBLE" property="umap2"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+        <result column="f_index" jdbcType="VARCHAR" property="index"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        f_gse_id,
+        f_barcode,
+        f_tsne1,
+        f_tsne2,
+        f_cluster,
+        f_gsm_id,
+        f_umap1,
+        f_umap2,
+        f_cell_type,
+        f_index
+    </sql>
+    <select id="searchByGseId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_cluster_anno
+        WHERE f_gse_id = #{gseId}
+    </select>
+    <select id="selectBySampleIdAndCellTypeAndNumber" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_cluster_anno
+        WHERE f_gse_id = #{gseId} AND f_cluster = #{cluster} AND f_index <![CDATA[ < ]]> #{number}
+    </select>
+    <select id="selectBySampleIdAndGsmIdAndNumber" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_cluster_anno
+        WHERE f_gse_id = #{gseId} AND f_gsm_id = #{gsmId} AND f_index <![CDATA[ < ]]> #{number}
+    </select>
+    <select id="searchGsmClusterCountByGseId" resultType="com.spring.boot.pojo.SampleCount">
+        SELECT DISTINCT `t_cluster_anno`.`f_gse_id`    AS gseId,
+                        `t_cluster_anno`.`f_gsm_id`    AS gsmId,
+--                         `t_cluster_anno`.`f_cluster`   AS cluster,
+                        `t_cluster_anno`.`f_cell_type` AS cellType,
+                        COUNT(0)                       AS `count`
+        FROM t_cluster_anno
+        WHERE f_gse_id = #{gseId}
+        GROUP BY `t_cluster_anno`.`f_gse_id`,
+                 `t_cluster_anno`.`f_gsm_id`,
+--             `t_cluster_anno`.`f_cluster`,
+                 t_cluster_anno.f_cell_type
+    </select>
+    <select id="searchCellTypeByGseId" resultType="java.lang.String">
+        SELECT DISTINCT `t_cluster_anno`.`f_cell_type` AS cellType
+        FROM t_cluster_anno
+        WHERE f_gse_id = #{gseId}
+    </select>
+</mapper>

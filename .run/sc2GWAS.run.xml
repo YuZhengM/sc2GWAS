@@ -1,0 +1,37 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="sc2GWAS" type="docker-deploy" factoryName="dockerfile" server-name="java">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="imageTag" value="sc2gwas" />
+        <option name="containerName" value="sc2gwas" />
+        <option name="portBindings">
+          <list>
+            <DockerPortBindingImpl>
+              <option name="containerPort" value="8080" />
+              <option name="hostPort" value="8150" />
+            </DockerPortBindingImpl>
+          </list>
+        </option>
+        <option name="commandLineOptions" value="--privileged" />
+        <option name="sourceFilePath" value="Dockerfile" />
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="${project_data}" />
+              <option name="hostPath" value="${project_data}" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/home/tomcat/tomcat/webapps" />
+              <option name="hostPath" value="${project_code}" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="${project_static}" />
+              <option name="hostPath" value="${project_static}" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>

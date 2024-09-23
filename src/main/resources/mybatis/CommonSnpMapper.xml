@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.CommonSnpMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.CommonSnp">
+        <result column="f_chr" jdbcType="VARCHAR" property="chr"/>
+        <result column="f_start" jdbcType="INTEGER" property="start"/>
+        <result column="f_end" jdbcType="INTEGER" property="end"/>
+        <result column="f_rs_id" jdbcType="VARCHAR" property="rsId"/>
+        <result column="f_ref" jdbcType="VARCHAR" property="ref"/>
+        <result column="f_alt" jdbcType="VARCHAR" property="alt"/>
+    </resultMap>
+
+    <select id="selectByChrAndStartAndEnd" resultMap="BaseResultMap">
+        select f_chr, f_start, f_end, f_rs_id, f_ref, f_alt
+        from t_common_snp
+        <include refid="com.spring.boot.chromatin_interaction_where"/>
+    </select>
+
+</mapper>

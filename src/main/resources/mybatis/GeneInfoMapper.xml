@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GeneInfoMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.GeneInfo">
+        <result column="f_gene" jdbcType="VARCHAR" property="gene"/>
+        <result column="f_ncbi_official_symbol" jdbcType="VARCHAR" property="ncbiOfficialSymbol"/>
+        <result column="f_entrez_id" jdbcType="VARCHAR" property="entrezId"/>
+        <result column="f_ensembl_id" jdbcType="VARCHAR" property="ensemblId"/>
+        <result column="f_reverse" jdbcType="VARCHAR" property="reverse"/>
+        <result column="f_chromosome" jdbcType="VARCHAR" property="chromosome"/>
+        <result column="f_location" jdbcType="VARCHAR" property="location"/>
+        <result column="f_chr" jdbcType="VARCHAR" property="chr"/>
+        <result column="f_start" jdbcType="INTEGER" property="start"/>
+        <result column="f_end" jdbcType="INTEGER" property="end"/>
+        <result column="f_full_name" jdbcType="VARCHAR" property="fullName"/>
+    </resultMap>
+    <select id="selectByGene" resultMap="BaseResultMap">
+        select f_gene,
+               f_ncbi_official_symbol,
+               f_entrez_id,
+               f_ensembl_id,
+               f_reverse,
+               f_chromosome,
+               f_location,
+               f_chr,
+               f_start,
+               f_end,
+               f_full_name
+        from t_gene_info
+        WHERE f_gene = #{gene}
+    </select>
+</mapper>

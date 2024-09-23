@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.CellTypeDifferentiationScoreMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.CellTypeDifferentiationScore">
+        <result column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_variance" jdbcType="DOUBLE" property="variance"/>
+        <result column="f_std_dev" jdbcType="DOUBLE" property="stdDev"/>
+        <result column="f_range" jdbcType="DOUBLE" property="range"/>
+        <result column="f_tissue" jdbcType="VARCHAR" property="tissue"/>
+        <result column="f_domain" jdbcType="VARCHAR" property="domain"/>
+        <result column="f_trait" jdbcType="VARCHAR" property="trait"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+    </resultMap>
+    <select id="selectByGseIdAndCellType" resultMap="BaseResultMap">
+        select f_gwas_id,
+               f_gse_id,
+               f_variance,
+               f_std_dev,
+               f_range,
+               f_tissue,
+               f_domain,
+               f_trait,
+               f_cell_type
+        from ${table}_differentiation_score
+        WHERE f_gse_id = #{gseId}
+    </select>
+    <select id="selectByGwasIdAndCellType" resultMap="BaseResultMap">
+        select f_gwas_id,
+               f_gse_id,
+               f_variance,
+               f_std_dev,
+               f_range,
+               f_tissue,
+               f_domain,
+               f_trait,
+               f_cell_type
+        from ${table}_differentiation_score
+        WHERE f_gwas_id = #{gwasId}
+    </select>
+</mapper>

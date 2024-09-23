@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GwasChrCountsMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.GwasChrCounts">
+        <result column="f_gwas_id" jdbcType="VARCHAR" property="gwasId"/>
+        <result column="f_chr" jdbcType="VARCHAR" property="chr"/>
+        <result column="f_count" jdbcType="INTEGER" property="count"/>
+    </resultMap>
+    <select id="selectByGwasId" resultMap="BaseResultMap">
+        select f_gwas_id, f_chr, f_count
+        from t_gwas_chr_counts
+        WHERE f_gwas_id = #{gwasId}
+    </select>
+</mapper>

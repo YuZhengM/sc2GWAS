@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.DistinctClusterCellTypeMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.DistinctClusterCellType">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+        <result column="f_disease" jdbcType="VARCHAR" property="disease"/>
+    </resultMap>
+    <select id="selectFieldByInfo" resultType="java.lang.String">
+        select
+        DISTINCT ${field}
+        from t_distinct_cluster_cell_type
+        where 1 = 1
+        <if test="searchVO.disease != null and searchVO.disease != '' and searchVO.disease != 'All'">
+            AND
+            f_disease = #{searchVO.disease}
+        </if>
+        <if test="searchVO.cellType != null and searchVO.cellType != '' and searchVO.cellType != 'All'">
+            AND
+            f_cell_type = #{searchVO.cellType}
+        </if>
+    </select>
+</mapper>

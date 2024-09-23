@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.boot.mapper.GoMapper">
+    <resultMap id="BaseResultMap" type="com.spring.boot.pojo.Go">
+        <result column="f_gse_id" jdbcType="VARCHAR" property="gseId"/>
+        <result column="f_cluster" jdbcType="INTEGER" property="cluster"/>
+        <result column="f_description" jdbcType="VARCHAR" property="description"/>
+        <result column="f_gene_ratio" jdbcType="DOUBLE" property="geneRatio"/>
+        <result column="f_p_value" jdbcType="DOUBLE" property="pValue"/>
+        <result column="f_p_adjust" jdbcType="DOUBLE" property="pAdjust"/>
+        <result column="f_q_value" jdbcType="DOUBLE" property="qValue"/>
+        <result column="f_count" jdbcType="INTEGER" property="count"/>
+        <result column="f_cell_type" jdbcType="VARCHAR" property="cellType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        f_gse_id,f_cluster,f_description,f_gene_ratio,f_p_value,f_p_adjust,f_q_value,f_count,f_cell_type
+    </sql>
+    <select id="searchBySampleIdAndCluster" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from t_go
+        WHERE f_gse_id = #{enrichment.gseId}
+        AND f_cluster = #{enrichment.cluster}
+        ORDER BY f_q_value
+    </select>
+    <select id="searchBySampleIdAndClusterAndNumber" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from t_go
+        WHERE f_gse_id = #{enrichment.gseId}
+        AND f_cluster = #{enrichment.cluster}
+        ORDER BY f_q_value
+        LIMIT ${enrichment.value}
+    </select>
+    <select id="searchBySampleIdAndClusterAndP" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from t_go
+        WHERE f_gse_id = #{enrichment.gseId}
+        AND f_cluster = #{enrichment.cluster}
+        AND f_p_adjust <![CDATA[ < ]]> #{enrichment.value}
+        ORDER BY f_q_value
+    </select>
+</mapper>
